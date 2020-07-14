@@ -2,7 +2,7 @@ const steemconnect = require('steemconnect');
 
 // init steemconnect
 let client = new steemconnect.Client({
-    app: 'demo-app',
+    app: 'titandlt',
     callbackURL: 'http://localhost:3000',
 });
 // get login URL
@@ -26,6 +26,7 @@ let lt = '',
 if (access_token) {
     // set access token after login
     client.setAccessToken(access_token);
+    console.log('access token set')
     // Logout button
     lt = `<a href="#" onclick='logOut()'>Log Out</a>`;
     // User name after successfull login
@@ -89,13 +90,13 @@ window.getUserDetails = () => {
 
 //transfer amounts.
 window.transfer=()=>{
-    const op = ['transfer', {
+    const ops = [['transfer', {
         from: username,
         to: 'thewall4095',
         amount: '0.001 STEEM',
         memo: 'Transfer with SteemConnect demo'
-      }];
-    steemconnect.sendOperation(op, {},function(err, result) {
+      }]];
+    client.broadcast(ops,function(err, result) {
         console.log('Transfer result', err, result);
         if (result)
         document.getElementById('transferDetail').innerHTML = result.id || result.result.id
